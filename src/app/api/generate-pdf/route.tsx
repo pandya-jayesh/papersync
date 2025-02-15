@@ -19,11 +19,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   headerTitle: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     textDecoration: 'underline',
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontWeight: 'heavy',
+    marginBottom: 20,
+    marginTop: 10,
   },
   companyInfo: {
     textAlign: 'center',
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   bankDetails: {
-    marginTop: 30,
+    marginTop: 100,
     fontSize: 10,
   }
 })
@@ -167,7 +168,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
       result += 'and ' + convertLessThanThousand(paise) + 'Paise ';
     }
 
-    return result + 'Only';
+    return result.toUpperCase() + 'ONLY';
   };
 
   return (
@@ -179,58 +180,58 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
         </Text>
 
         {/* Logo positioned absolutely on the left */}
-        <View style={{ position: 'absolute', top: 50, left: 30 }}>
+        <View style={{ position: 'absolute', top: 53, left: 27 }}>
           <Image
-            src="public/Mahadev.png"
-            style={{ width: 80, height: 80 }}
-            alt="Company Logo"
+            src="public/mahadev-logo-v.0.1.png"
+            style={{ height: 100 }}
           />
         </View>
 
         {/* Company Info centered */}
-        <View style={[styles.companyInfo, { textAlign: 'center' }]}>
+        <View style={[styles.companyInfo, { textAlign: 'center', paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#000' }]}>
           <Text>Shivparvai Tenament, Top3 Circle, Ring road,</Text>
           <Text>Bhavnagar -364002</Text>
           <Text>Phone: 8000103233</Text>
-          <Text>Mail id:mahadev.ac.consultancy@gmail.com</Text>
+          <Text>Mail: mahadev.ac.consultancy@gmail.com</Text>
         </View>
 
         <Text style={styles.taxInvoice}>TAX INVOICE</Text>
 
-        <View style={[{ borderWidth: 1, marginBottom: 20 }]}>
-          {/* First Row - Headers */}
-          <View style={[{ flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#000' }]}>
-            <View style={[{ width: '50%', borderRightWidth: 1, borderRightColor: '#000' }]}>
-              <Text style={[styles.tableHeader, { padding: 4 }]}>BILL TO</Text>
-            </View>
-            <View style={[{ width: '25%', borderRightWidth: 1, borderRightColor: '#000' }]}>
-              <Text style={[styles.tableHeader, { padding: 4 }]}>INVOICE NO.</Text>
-            </View>
-            <View style={[{ width: '25%' }]}>
-              <Text style={[styles.tableHeader, { padding: 4 }]}>DATE</Text>
-            </View>
-          </View>
-
-          {/* Second Row - Name and Values */}
-          <View style={[{ flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#000' }]}>
-            <View style={[{ width: '50%', borderRightWidth: 1, borderRightColor: '#000' }]}>
-              <Text style={{ padding: 4 }}>{data.name}</Text>
-            </View>
-            <View style={[{ width: '25%', borderRightWidth: 1, borderRightColor: '#000' }]}>
-              <Text style={{ padding: 4 }}>{data.invoiceNo}</Text>
-            </View>
-            <View style={[{ width: '25%' }]}>
-              <Text style={{ padding: 4 }}>{new Date(data.date).toLocaleDateString()}</Text>
-            </View>
-          </View>
-
-          {/* Third Row - Address */}
+        {/* Updated two-column header structure */}
+        <View style={[{ marginBottom: 40 }]}> 
           <View style={[{ flexDirection: 'row' }]}>
-            <View style={[{ width: '50%', borderRightWidth: 1, borderRightColor: '#000' }]}>
+          {/* Left Column - Bill To */}
+            <View style={[{ width: '50%', borderWidth: 1, borderRightColor: '#000' }]}>
+              <Text style={[styles.tableHeader, { padding: 4, borderBottomWidth: 1, borderBottomColor: '#000' }]}>
+                BILL TO
+              </Text>
+              <Text style={{ padding: 4 }}>{data.name}</Text>
               <Text style={{ padding: 4 }}>{data.address}</Text>
             </View>
-            <View style={[{ width: '50%' }]}>
-              {/* Empty space for invoice no and date columns */}
+
+            {/* Right Column - Invoice Details */}
+            <View style={[{ width: '50%' }, { flexDirection: 'row'}]}>
+              <View style={[{ width: '50%' }]}>
+
+              </View>
+              <View style={[{ width: '50%' }, {borderWidth: 1, borderLeftColor: '#000'}]}>
+                {/* Invoice Number */}
+                <View style={[{ borderBottomWidth: 1, borderBottomColor: '#000' }]}>
+                  <Text style={[styles.tableHeader, { padding: 4, borderBottomWidth: 1, borderBottomColor: '#000' }]}>
+                    INVOICE NO.
+                  </Text>
+                  <Text style={{ padding: 4 }}>{data.invoiceNo}</Text>
+                </View>
+                
+                {/* Date */}
+                <View>
+                  <Text style={[styles.tableHeader, { padding: 4, borderBottomWidth: 1, borderBottomColor: '#000' }]}>
+                    DATE
+                  </Text>
+                  <Text style={{ padding: 4 }}>{new Date(data.date).toLocaleDateString()}</Text>
+                </View>
+              </View>
+
             </View>
           </View>
         </View>
@@ -274,7 +275,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
 
           <View style={styles.tableRow}>
             <View style={[styles.tableCol, styles.descriptionCol]}>
-              <Text>TAXATION MATTER FEES I.T. RETURN FILLING FEES ASS. YEAR {assessmentYear}</Text>
+              <Text>TAXATION MATTER FEES I.T. RETURN FILLING FEES F.Y. YEAR {financialYear}</Text>
               <Text>(ASSESSMENT YEAR {assessmentYear})</Text>
             </View>
             <View style={[styles.tableCol, styles.amountCol, { borderRightWidth: 0 }]}>
@@ -294,7 +295,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
 
           <View style={[styles.tableRow, { borderBottomWidth: 0 }]}>
             <View style={[styles.tableCol, styles.descriptionCol]}>
-              <Text style={{ fontWeight: 'bold' }}>TOTAL</Text>
+              <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>TOTAL</Text>
             </View>
             <View style={[styles.tableCol, styles.amountCol, { borderRightWidth: 0 }]}>
               <Text style={{ fontWeight: 'bold' }}>{totalAmount.toFixed(2)}</Text>
@@ -306,16 +307,21 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
           RS. IN WORD: {numberToWords(totalAmount)}
         </Text>
 
-        <View style={styles.bankDetails}>
-          <Text style={{ marginBottom: 5 }}>FOR JAYESH I PANDYA</Text>
+        <View style={[styles.bankDetails]}>
+          <Text >FOR JAYESH I PANDYA</Text>
+        </View>
+
+        <View style={{ position: 'absolute', left: 30, bottom: 50 }}>
           <Text>BANK NAME: STATE BANK OF INDIA</Text>
           <Text>ACCOUNT NO: 42201415868</Text>
           <Text>IFSC CODE: SBIN0018869</Text>
         </View>
 
-        <View style={{ position: 'absolute', right: 30, bottom: 30 }}>
-          <Text>RECEIVED & CREDITED</Text>
+        <View style={{ width: '170px', height: '130px', borderWidth: 1, borderColor: '#000', position: 'absolute', right: 30, bottom: 50 }}>
+          <Text style={{ textAlign: 'center', padding: 4, borderBottomWidth: 1, borderBottomColor: '#000' }}>RECEIVED & CREDITED</Text>
+
         </View>
+
       </Page>
     </Document>
   )

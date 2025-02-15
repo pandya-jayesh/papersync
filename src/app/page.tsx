@@ -7,7 +7,7 @@ export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
-    invoiceNo: '',
+    invoiceNo: 'MA/',
     date: new Date().toISOString().split('T')[0],
     accountingFees: '0',
     taxConsultancy: '0',
