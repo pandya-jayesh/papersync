@@ -30,6 +30,7 @@ export default function ListingsPage() {
 
   useEffect(() => {
     fetchEntries()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, sortField, sortOrder, searchTerm])
 
   const fetchEntries = async () => {

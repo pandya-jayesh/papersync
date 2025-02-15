@@ -7,7 +7,6 @@ import {
   View,
   StyleSheet,
   renderToStream,
-  Font,
   Image
 } from '@react-pdf/renderer'
 
@@ -172,6 +171,7 @@ const InvoicePDF = ({ data }) => {
           <Image
             src="public/Mahadev.png"
             style={{ width: 80, height: 80 }}
+            alt="Company Logo"
           />
         </View>
 

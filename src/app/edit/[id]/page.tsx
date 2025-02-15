@@ -22,6 +22,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
 
   useEffect(() => {
     fetchEntry()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id])
 
   const fetchEntry = async () => {

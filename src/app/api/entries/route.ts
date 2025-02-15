@@ -15,33 +15,77 @@ export async function GET(request: Request) {
     // Calculate skip
     const skip = (page - 1) * limit
 
+    // Base where condition
+    const whereCondition = {
+      OR: [
+        { name: { contains: search } },
+        { invoiceNo: { contains: search } }
+      ]
+    }
+
+    // Create orderBy object based on sortField
+    let orderBy: any = {}
+    if (sortField === 'totalAmount') {
+      orderBy = {
+        _sum: {
+          accountingFees: true,
+          taxConsultancy: true,
+          consultancyFees: true,
+          taxationFees: true,
+          otherCharges: true
+        }
+      }
+    } else {
+      orderBy = { [sortField]: sortOrder }
+    }
+
     // Get total count for pagination
     const totalCount = await prisma.formEntry.count({
-      where: {
-        OR: [
-          { name: { contains: search } },
-          { invoiceNo: { contains: search } }
-        ]
-      }
+      where: whereCondition
     })
 
     // Get entries with pagination and sorting
-    const entries = await prisma.formEntry.findMany({
-      where: {
-        OR: [
-          { name: { contains: search } },
-          { invoiceNo: { contains: search } }
-        ]
-      },
-      orderBy: {
-        [sortField]: sortOrder
-      },
+    let entries = await prisma.formEntry.findMany({
+      where: whereCondition,
+      orderBy,
       skip,
-      take: limit
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        address: true,
+        invoiceNo: true,
+        date: true,
+        accountingFees: true,
+        taxConsultancy: true,
+        consultancyFees: true,
+        taxationFees: true,
+        otherCharges: true
+      }
     })
 
+    // Calculate total amount for each entry and sort if needed
+    const entriesWithTotal = entries.map(entry => ({
+      ...entry,
+      totalAmount: 
+        entry.accountingFees +
+        entry.taxConsultancy +
+        entry.consultancyFees +
+        entry.taxationFees +
+        entry.otherCharges
+    }))
+
+    // Sort by total amount if that's the selected sort field
+    if (sortField === 'totalAmount') {
+      entriesWithTotal.sort((a, b) => {
+        return sortOrder === 'asc' 
+          ? a.totalAmount - b.totalAmount
+          : b.totalAmount - a.totalAmount
+      })
+    }
+
     return NextResponse.json({
-      entries,
+      entries: entriesWithTotal,
       totalCount,
       totalPages: Math.ceil(totalCount / limit)
     })
