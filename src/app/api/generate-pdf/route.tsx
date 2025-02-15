@@ -84,7 +84,19 @@ const styles = StyleSheet.create({
   }
 })
 
-const InvoicePDF = ({ data }) => {
+interface InvoiceData {
+  name: string
+  address: string
+  invoiceNo: string
+  date: Date
+  accountingFees: number
+  taxConsultancy: number
+  consultancyFees: number
+  taxationFees: number
+  otherCharges: number
+}
+
+const InvoicePDF = ({ data }: { data: InvoiceData }) => {
   const currentYear = Number(new Date().getFullYear().toString().slice(-2)); // Gets last 2 digits (e.g. 25)
   const previousYear = currentYear - 1; // e.g. 24
   const financialYear = `${previousYear - 1}-${previousYear}`; // e.g. 23-24

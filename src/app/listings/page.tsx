@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { FormEntry } from '@prisma/client'
-import { useRouter } from 'next/navigation'
-import { useSearchParams, usePathname } from 'next/navigation'
 
 interface ApiResponse {
   entries: FormEntry[]
@@ -13,10 +11,6 @@ interface ApiResponse {
 }
 
 export default function ListingsPage() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  
   const [entries, setEntries] = useState<FormEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState(false)

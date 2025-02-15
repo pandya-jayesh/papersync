@@ -3,6 +3,18 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+type OrderByType = {
+  [key: string]: 'asc' | 'desc' | {
+    _sum?: {
+      accountingFees?: boolean
+      taxConsultancy?: boolean
+      consultancyFees?: boolean
+      taxationFees?: boolean
+      otherCharges?: boolean
+    }
+  }
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -24,7 +36,7 @@ export async function GET(request: Request) {
     }
 
     // Create orderBy object based on sortField
-    let orderBy: any = {}
+    let orderBy: OrderByType = {}
     if (sortField === 'totalAmount') {
       orderBy = {
         _sum: {
