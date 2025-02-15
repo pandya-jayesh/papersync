@@ -57,7 +57,7 @@ export async function GET(request: Request) {
     })
 
     // Get entries with pagination and sorting
-    let entries = await prisma.formEntry.findMany({
+    const entries = await prisma.formEntry.findMany({
       where: whereCondition,
       orderBy,
       skip,
