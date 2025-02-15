@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model FormEntry {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Form Fields
+  name            String
+  address         String
+  invoiceNo       String  // Format: MA/{index}
+  date            DateTime
+  
+  // Fees Fields
+  accountingFees     Float   // For year ended 22-23
+  taxConsultancy     Float   // For year ended 22-23
+  consultancyFees    Float   // Accounting consultancy fees
+  taxationFees       Float   // IT return filling fees
+  otherCharges       Float   // Monthly stock statement charges
+}
