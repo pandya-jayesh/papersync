@@ -109,7 +109,7 @@ export default function Home() {
                 step="0.01"
                 className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.accountingFees}
-                onChange={(e) => setFormData({...formData, accountingFees: parseFloat(e.target.value)})}
+                onChange={(e) => setFormData({...formData, accountingFees: (e.target.value)})}
               />
             </div>
 
@@ -123,7 +123,7 @@ export default function Home() {
                 step="0.01"
                 className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.taxConsultancy}
-                onChange={(e) => setFormData({...formData, taxConsultancy: parseFloat(e.target.value)})}
+                onChange={(e) => setFormData({...formData, taxConsultancy: (e.target.value)})}
               />
             </div>
 
@@ -137,7 +137,7 @@ export default function Home() {
                 step="0.01"
                 className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.consultancyFees}
-                onChange={(e) => setFormData({...formData, consultancyFees: parseFloat(e.target.value)})}
+                onChange={(e) => setFormData({...formData, consultancyFees: (e.target.value)})}
               />
             </div>
 
@@ -151,7 +151,7 @@ export default function Home() {
                 step="0.01"
                 className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.taxationFees}
-                onChange={(e) => setFormData({...formData, taxationFees: parseFloat(e.target.value)})}
+                onChange={(e) => setFormData({...formData, taxationFees: (e.target.value)})}
               />
             </div>
 
@@ -165,7 +165,7 @@ export default function Home() {
                 step="0.01"
                 className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.otherCharges}
-                onChange={(e) => setFormData({...formData, otherCharges: parseFloat(e.target.value)})}
+                onChange={(e) => setFormData({...formData, otherCharges: (e.target.value)})}
               />
             </div>
           </div>

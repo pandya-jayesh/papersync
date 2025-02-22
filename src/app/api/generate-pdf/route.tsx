@@ -355,7 +355,17 @@ export async function GET(request: Request) {
     for await (const chunk of pdfStream) {
       chunks.push(chunk)
     }
-    const buffer = Buffer.concat(chunks)
+    const normalizedChunks = chunks.map(chunk => {
+      if (typeof chunk === 'string') {
+        return new TextEncoder().encode(chunk); // Convert string to Uint8Array
+      } else if (Buffer.isBuffer(chunk)) {
+        return new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength); // Convert Buffer to Uint8Array
+      }
+      throw new Error("Invalid chunk type");
+    });
+
+
+    const buffer = Buffer.concat(normalizedChunks)
 
     // Return PDF
     return new NextResponse(buffer, {

@@ -37,19 +37,7 @@ export async function GET(request: Request) {
 
     // Create orderBy object based on sortField
     let orderBy: OrderByType = {}
-    if (sortField === 'totalAmount') {
-      orderBy = {
-        _sum: {
-          accountingFees: true,
-          taxConsultancy: true,
-          consultancyFees: true,
-          taxationFees: true,
-          otherCharges: true
-        }
-      }
-    } else {
-      orderBy = { [sortField]: sortOrder }
-    }
+    orderBy = { [sortField]: sortOrder }
 
     // Get total count for pagination
     const totalCount = await prisma.formEntry.count({

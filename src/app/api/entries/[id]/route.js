@@ -3,16 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-type RouteParams = {
-  params: {
-    id: string
-  }
-}
-
-export async function DELETE(
-  request: Request,
-  { params }: RouteParams
-) {
+export async function DELETE(request, { params }) {
   try {
     await prisma.formEntry.delete({
       where: {
@@ -30,10 +21,7 @@ export async function DELETE(
   }
 }
 
-export async function GET(
-  request: Request,
-  { params }: RouteParams
-) {
+export async function GET(request, { params }) {
   try {
     const entry = await prisma.formEntry.findUnique({
       where: {
@@ -55,10 +43,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: RouteParams
-) {
+export async function PUT(request, { params }) {
   try {
     const data = await request.json()
 
@@ -85,4 +70,4 @@ export async function PUT(
       { status: 500 }
     )
   }
-} 
+}
