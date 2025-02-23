@@ -10,6 +10,8 @@ import {
 } from '@react-pdf/renderer'
 import { db } from '@/lib/firebase'
 import { doc, getDoc } from 'firebase/firestore'
+import { headers } from 'next/headers';
+
 
 const styles = StyleSheet.create({
   page: {
@@ -168,6 +170,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
 
     return result.toUpperCase() + 'ONLY';
   };
+  const domain = process.env.NEXT_PUBLIC_VERCEL_URL || 'localhost:3000'
 
   return (
     <Document>
@@ -180,7 +183,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
         {/* Logo positioned absolutely on the left */}
         <View style={{ position: 'absolute', top: 53, left: 27 }}>
           <Image
-            src="/mahadev-logo-v.0.1.png"
+            src={`${domain}/mahadev-logo-v.0.1.png`}
             style={{ height: 100 }}
           />
         </View>
