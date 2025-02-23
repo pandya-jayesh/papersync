@@ -1,16 +1,11 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { db } from '@/lib/firebase'
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 
 export async function DELETE(request, { params }) {
   try {
-    await prisma.formEntry.delete({
-      where: {
-        id: params.id
-      }
-    })
-
+    const docRef = doc(db, 'entries', params.id)
+    await deleteDoc(docRef)
     return NextResponse.json({ message: 'Entry deleted successfully' })
   } catch (error) {
     console.error('Error deleting entry:', error)
@@ -23,17 +18,14 @@ export async function DELETE(request, { params }) {
 
 export async function GET(request, { params }) {
   try {
-    const entry = await prisma.formEntry.findUnique({
-      where: {
-        id: params.id
-      }
-    })
+    const docRef = doc(db, 'entries', params.id)
+    const docSnap = await getDoc(docRef)
 
-    if (!entry) {
+    if (!docSnap.exists()) {
       return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
     }
 
-    return NextResponse.json(entry)
+    return NextResponse.json({ id: docSnap.id, ...docSnap.data() })
   } catch (error) {
     console.error('Error fetching entry:', error)
     return NextResponse.json(
@@ -46,23 +38,21 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const data = await request.json()
+    const docRef = doc(db, 'entries', params.id)
 
-    const entry = await prisma.formEntry.update({
-      where: {
-        id: params.id
-      },
-      data: {
-        ...data,
-        date: new Date(data.date),
-        accountingFees: parseFloat(data.accountingFees),
-        taxConsultancy: parseFloat(data.taxConsultancy),
-        consultancyFees: parseFloat(data.consultancyFees),
-        taxationFees: parseFloat(data.taxationFees),
-        otherCharges: parseFloat(data.otherCharges)
-      }
-    })
+    const updateData = {
+      ...data,
+      date: new Date(data.date).toISOString(),
+      accountingFees: parseFloat(data.accountingFees),
+      taxConsultancy: parseFloat(data.taxConsultancy),
+      consultancyFees: parseFloat(data.consultancyFees),
+      taxationFees: parseFloat(data.taxationFees),
+      otherCharges: parseFloat(data.otherCharges),
+      updatedAt: new Date().toISOString()
+    }
 
-    return NextResponse.json(entry)
+    await updateDoc(docRef, updateData)
+    return NextResponse.json({ id: params.id, ...updateData })
   } catch (error) {
     console.error('Error updating entry:', error)
     return NextResponse.json(

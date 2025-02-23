@@ -1,93 +1,40 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
-
-type OrderByType = {
-  [key: string]: 'asc' | 'desc' | {
-    _sum?: {
-      accountingFees?: boolean
-      taxConsultancy?: boolean
-      consultancyFees?: boolean
-      taxationFees?: boolean
-      otherCharges?: boolean
-    }
-  }
-}
+import { db } from '@/lib/firebase'
+import { collection, query, where, orderBy, limit, getDocs, addDoc } from 'firebase/firestore'
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '10')
+    // const page = parseInt(searchParams.get('page') || '1')
+    const limitNum = parseInt(searchParams.get('limit') || '10')
     const search = searchParams.get('search') || ''
     const sortField = searchParams.get('sortField') || 'date'
     const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc'
 
-    // Calculate skip
-    const skip = (page - 1) * limit
+    const entriesRef = collection(db, 'entries')
+    let q = query(entriesRef, orderBy(sortField, sortOrder), limit(limitNum))
 
-    // Base where condition
-    const whereCondition = {
-      OR: [
-        { name: { contains: search } },
-        { invoiceNo: { contains: search } }
-      ]
+    if (search) {
+      q = query(q, 
+        where('name', '>=', search),
+        where('name', '<=', search + '\uf8ff')
+      )
     }
 
-    // Create orderBy object based on sortField
-    let orderBy: OrderByType = {}
-    orderBy = { [sortField]: sortOrder }
-
-    // Get total count for pagination
-    const totalCount = await prisma.formEntry.count({
-      where: whereCondition
-    })
-
-    // Get entries with pagination and sorting
-    const entries = await prisma.formEntry.findMany({
-      where: whereCondition,
-      orderBy,
-      skip,
-      take: limit,
-      select: {
-        id: true,
-        name: true,
-        address: true,
-        invoiceNo: true,
-        date: true,
-        accountingFees: true,
-        taxConsultancy: true,
-        consultancyFees: true,
-        taxationFees: true,
-        otherCharges: true
-      }
-    })
-
-    // Calculate total amount for each entry and sort if needed
-    const entriesWithTotal = entries.map(entry => ({
-      ...entry,
-      totalAmount: 
-        entry.accountingFees +
-        entry.taxConsultancy +
-        entry.consultancyFees +
-        entry.taxationFees +
-        entry.otherCharges
+    const snapshot = await getDocs(q)
+    const entries = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
     }))
 
-    // Sort by total amount if that's the selected sort field
-    if (sortField === 'totalAmount') {
-      entriesWithTotal.sort((a, b) => {
-        return sortOrder === 'asc' 
-          ? a.totalAmount - b.totalAmount
-          : b.totalAmount - a.totalAmount
-      })
-    }
+    // Get total count
+    const totalSnapshot = await getDocs(collection(db, 'entries'))
+    const totalCount = totalSnapshot.size
 
     return NextResponse.json({
-      entries: entriesWithTotal,
+      entries,
       totalCount,
-      totalPages: Math.ceil(totalCount / limit)
+      totalPages: Math.ceil(totalCount / limitNum)
     })
   } catch (error) {
     console.error('Error fetching entries:', error)
@@ -101,34 +48,29 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const data = await request.json()
-    console.log('Received data:', data)
-
     if (!data) {
       return NextResponse.json({ error: 'No data provided' }, { status: 400 })
     }
 
-    // Ensure date is properly formatted
     const formattedData = {
       ...data,
-      date: new Date(data.date),
+      date: new Date(data.date).toISOString(),
       accountingFees: parseFloat(data.accountingFees),
       taxConsultancy: parseFloat(data.taxConsultancy),
       consultancyFees: parseFloat(data.consultancyFees),
       taxationFees: parseFloat(data.taxationFees),
-      otherCharges: parseFloat(data.otherCharges)
+      otherCharges: parseFloat(data.otherCharges),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     }
 
-
-    const entry = await prisma.formEntry.create({
-      data: formattedData
-    })
-
-    return NextResponse.json(entry)
+    const docRef = await addDoc(collection(db, 'entries'), formattedData)
+    return NextResponse.json({ id: docRef.id, ...formattedData })
   } catch (error) {
-    console.error('Detailed error:', error)
+    console.error('Error creating entry:', error)
     return NextResponse.json(
-      { error: 'Error creating entry', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Error creating entry' },
       { status: 500 }
     )
   }
-} 
+}

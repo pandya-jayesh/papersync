@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
 import {
   Document,
   Page,
@@ -9,10 +8,9 @@ import {
   renderToStream,
   Image
 } from '@react-pdf/renderer'
+import { db } from '@/lib/firebase'
+import { doc, getDoc } from 'firebase/firestore'
 
-const prisma = new PrismaClient()
-
-// Create styles
 const styles = StyleSheet.create({
   page: {
     padding: 30,
@@ -330,25 +328,26 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const invoiceNo = searchParams.get('invoiceNo')
+    const id = searchParams.get('id')
 
-    if (!invoiceNo) {
-      return NextResponse.json({ error: 'Invoice number is required' }, { status: 400 })
+    if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 })
     }
 
-    // Get entry from database
-    const entry = await prisma.formEntry.findFirst({
-      where: {
-        invoiceNo: invoiceNo
-      }
-    })
+    // Get entry from Firestore
+    // const docRef = doc(db, 'invoices', id)
+    const docRef = doc(db, 'entries', id)
 
-    if (!entry) {
+    const docSnap = await getDoc(docRef)
+
+    if (!docSnap.exists()) {
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 })
     }
 
+    const entry = docSnap.data()
+
     // Generate PDF
-    const pdfStream = await renderToStream(<InvoicePDF data={entry} />)
+    const pdfStream = await renderToStream(<InvoicePDF data={entry as InvoiceData} />)
 
     // Convert stream to buffer
     const chunks = []
@@ -357,13 +356,12 @@ export async function GET(request: Request) {
     }
     const normalizedChunks = chunks.map(chunk => {
       if (typeof chunk === 'string') {
-        return new TextEncoder().encode(chunk); // Convert string to Uint8Array
+        return new TextEncoder().encode(chunk)
       } else if (Buffer.isBuffer(chunk)) {
-        return new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength); // Convert Buffer to Uint8Array
+        return new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength)
       }
-      throw new Error("Invalid chunk type");
+      throw new Error("Invalid chunk type")
     });
-
 
     const buffer = Buffer.concat(normalizedChunks)
 
@@ -371,7 +369,7 @@ export async function GET(request: Request) {
     return new NextResponse(buffer, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `inline; filename="invoice-${invoiceNo}.pdf"`
+        'Content-Disposition': `inline; filename="invoice-${id}.pdf"`
       }
     })
   } catch (error) {

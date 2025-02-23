@@ -29,7 +29,8 @@ export default function Home() {
       })
 
       if (response.ok) {
-        window.open(`/api/generate-pdf?invoiceNo=${formData.invoiceNo}`, "_blank");
+        const responseData = await response.json()
+        window.open(`/api/generate-pdf?id=${responseData.id}`, "_blank");
       }
     } catch (error) {
       console.error('Error saving entry:', error)

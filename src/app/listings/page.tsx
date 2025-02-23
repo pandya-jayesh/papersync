@@ -2,7 +2,19 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FormEntry } from '@prisma/client'
+
+interface FormEntry {
+  id: string
+  name: string
+  address: string
+  invoiceNo: string
+  date: string
+  accountingFees: number
+  taxConsultancy: number
+  consultancyFees: number
+  taxationFees: number
+  otherCharges: number
+}
 
 interface ApiResponse {
   entries: FormEntry[]
@@ -85,10 +97,6 @@ export default function ListingsPage() {
   const handleSearch = (value: string) => {
     setSearchTerm(value)
     setCurrentPage(1) // Reset to first page when search changes
-  }
-
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString()
   }
 
   const formatCurrency = (amount: number) => {
@@ -175,14 +183,14 @@ export default function ListingsPage() {
                         key={entry.id} 
                         className="border-b border-gray-700 hover:bg-gray-700/50"
                       >
-                        <td className="px-6 py-4">{formatDate(entry.date)}</td>
+                        <td className="px-6 py-4">{entry.date}</td>
                         <td className="px-6 py-4">{entry.invoiceNo}</td>
                         <td className="px-6 py-4">{entry.name}</td>
                         <td className="px-6 py-4 text-right">{formatCurrency(totalAmount)}</td>
                         <td className="px-6 py-4">
                           <div className="flex justify-end space-x-2">
                             <button
-                              onClick={() => window.open(`/api/generate-pdf?invoiceNo=${entry.invoiceNo}`, '_blank')}
+                              onClick={() => window.open(`/api/generate-pdf?id=${entry.id}`, '_blank')}
                               className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
                               disabled={actionLoading}
                             >
@@ -235,4 +243,4 @@ export default function ListingsPage() {
       </div>
     </main>
   )
-} 
+}
