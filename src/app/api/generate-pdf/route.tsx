@@ -170,8 +170,11 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
 
     return result.toUpperCase() + 'ONLY';
   };
-  const domain = process.env.NEXT_PUBLIC_VERCEL_URL || 'localhost:3000'
 
+  const domain = process.env.NEXT_PUBLIC_VERCEL_URL
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    : 'http://localhost:3000';
+    
   return (
     <Document>
       <Page size="A4" style={styles.page}>
