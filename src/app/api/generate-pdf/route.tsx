@@ -180,7 +180,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
         {/* Logo positioned absolutely on the left */}
         <View style={{ position: 'absolute', top: 53, left: 27 }}>
           <Image
-            src="public/mahadev-logo-v.0.1.png"
+            src="/public/mahadev-logo-v.0.1.png"
             style={{ height: 100 }}
           />
         </View>
