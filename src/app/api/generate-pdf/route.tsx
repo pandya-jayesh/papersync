@@ -10,7 +10,6 @@ import {
 } from '@react-pdf/renderer'
 import { db } from '@/lib/firebase'
 import { doc, getDoc } from 'firebase/firestore'
-import { headers } from 'next/headers';
 
 
 const styles = StyleSheet.create({
@@ -174,7 +173,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
   const domain = process.env.NEXT_PUBLIC_VERCEL_URL
     ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
     : 'http://localhost:3000';
-    
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
