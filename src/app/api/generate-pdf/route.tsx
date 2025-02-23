@@ -170,10 +170,6 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
     return result.toUpperCase() + 'ONLY';
   };
 
-  const domain = process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : 'http://localhost:3000';
-
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -185,7 +181,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
         {/* Logo positioned absolutely on the left */}
         <View style={{ position: 'absolute', top: 53, left: 27 }}>
           <Image
-            src={`${domain}/mahadev-logo-v.0.1.png`}
+            src="https://papersync.vercel.app/mahadev-logo-v.0.1.png"
             style={{ height: 100 }}
           />
         </View>
