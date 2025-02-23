@@ -188,7 +188,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
 
         {/* Company Info centered */}
         <View style={[styles.companyInfo, { textAlign: 'center', paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#000' }]}>
-          <Text>Shivparvai Tenament, Top3 Circle, Ring road,</Text>
+          <Text>Shivparvati Tenament, Top3 Circle, Ring road,</Text>
           <Text>Bhavnagar -364002</Text>
           <Text>Phone: 8000103233</Text>
           <Text>Mail: mahadev.ac.consultancy@gmail.com</Text>
