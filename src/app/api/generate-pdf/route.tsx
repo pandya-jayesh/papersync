@@ -170,12 +170,6 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
     return result.toUpperCase() + 'ONLY';
   };
 
-  const formatDate = (d: unknown): string => {
-    let date = new Date(data.date).toLocaleDateString("en-GB");
-
-    return date;
-  };
-
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -233,7 +227,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
                   <Text style={[styles.tableHeader, { padding: 4, borderBottomWidth: 1, borderBottomColor: '#000' }]}>
                     DATE
                   </Text>
-                  <Text style={{ padding: 4 }}>{formatDate(data.date)}</Text>
+                  <Text style={{ padding: 4 }}>{new Date(data.date).toLocaleDateString("en-GB")}</Text>
                 </View>
               </View>
 
