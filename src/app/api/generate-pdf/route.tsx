@@ -181,7 +181,7 @@ const InvoicePDF = ({ data }: { data: InvoiceData }) => {
         {/* Logo positioned absolutely on the left */}
         <View style={{ position: 'absolute', top: 53, left: 27 }}>
           <Image
-            src="https://papersync.vercel.app/mahadev-logo-v.0.1.png"
+            src="https://papersync.vercel.app/mahadev-logo-v.0.3.png"
             style={{ height: 100 }}
           />
         </View>
