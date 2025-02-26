@@ -68,26 +68,26 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center">
+      <div className="min-h-screen  text-gray-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
       </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-gray-900 text-gray-100 p-8">
+    <main className="min-h-screen p-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Edit Invoice</h1>
           <Link 
             href="/listings" 
-            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition"
+            className="px-4 py-2 rounded border bg-zinc-50 hover:bg-zinc-300 text-zinc-900 border-zinc-800  transition"
           >
             Back to Listings
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 bg-gray-800 p-6 rounded-lg shadow-xl">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-zinc-900 border border-zinc-700 p-6 rounded-lg shadow-xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Basic Information */}
             <div>
@@ -95,7 +95,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
               <input
                 type="text"
                 required
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
@@ -107,7 +107,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
                 type="text"
                 required
                 placeholder="MA/"
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.invoiceNo}
                 onChange={(e) => setFormData({...formData, invoiceNo: e.target.value})}
               />
@@ -118,7 +118,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
               <input
                 type="date"
                 required
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.date}
                 onChange={(e) => setFormData({...formData, date: e.target.value})}
               />
@@ -128,7 +128,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
               <label className="block text-sm font-medium mb-1">Address</label>
               <textarea
                 required
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 rows={3}
                 value={formData.address}
                 onChange={(e) => setFormData({...formData, address: e.target.value})}
@@ -144,7 +144,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
                 type="number"
                 required
                 step="0.01"
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.accountingFees}
                 onChange={(e) => setFormData({...formData, accountingFees: (e.target.value)})}
               />
@@ -158,7 +158,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
                 type="number"
                 required
                 step="0.01"
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.taxConsultancy}
                 onChange={(e) => setFormData({...formData, taxConsultancy: (e.target.value)})}
               />
@@ -172,7 +172,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
                 type="number"
                 required
                 step="0.01"
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.consultancyFees}
                 onChange={(e) => setFormData({...formData, consultancyFees: (e.target.value)})}
               />
@@ -186,7 +186,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
                 type="number"
                 required
                 step="0.01"
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.taxationFees}
                 onChange={(e) => setFormData({...formData, taxationFees: (e.target.value)})}
               />
@@ -200,7 +200,7 @@ export default function EditPage({ params: paramsPromise }: { params: Promise<{ 
                 type="number"
                 required
                 step="0.01"
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white"
+                className="w-full bg-zinc-800 border border-gray-600 rounded-md p-2 text-white"
                 value={formData.otherCharges}
                 onChange={(e) => setFormData({...formData, otherCharges: (e.target.value)})}
               />
