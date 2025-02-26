@@ -32,7 +32,7 @@ export default function ListingsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
-  const entriesPerPage = 10
+  const entriesPerPage = 3
 
   useEffect(() => {
     fetchEntries()
@@ -106,22 +106,15 @@ export default function ListingsPage() {
     }).format(amount)
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-900 text-gray-100 p-8 flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
-    )
-  }
 
   return (
-    <main className="min-h-screen bg-gray-900 text-gray-100 p-8">
+    <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-white">Invoice Listings</h1>
           <Link 
             href="/" 
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            className="px-4 py-2 rounded border bg-zinc-50 hover:bg-zinc-300 text-zinc-900 border-zinc-800  transition"
           >
             Create New Invoice
           </Link>
@@ -131,7 +124,7 @@ export default function ListingsPage() {
           <input
             type="text"
             placeholder="Search by name or invoice number..."
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2"
+            className="w-full bg-zinc-900 border border-gray-700 rounded-lg px-4 py-2"
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
           />
@@ -143,24 +136,24 @@ export default function ListingsPage() {
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto bg-gray-800 rounded-lg shadow">
+            <div className="overflow-x-auto rounded-lg shadow">
               <table className="min-w-full">
-                <thead className="bg-gray-700">
+                <thead className="bg-zinc-900">
                   <tr>
                     <th 
-                      className="px-6 py-3 text-left cursor-pointer hover:bg-gray-600"
+                      className="px-6 py-3 text-left cursor-pointer hover:bg-zinc-800"
                       onClick={() => handleSort('date')}
                     >
                       Date {sortField === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
                     </th>
                     <th 
-                      className="px-6 py-3 text-left cursor-pointer hover:bg-gray-600"
+                      className="px-6 py-3 text-left cursor-pointer hover:bg-zinc-800"
                       onClick={() => handleSort('invoiceNo')}
                     >
                       Invoice No {sortField === 'invoiceNo' && (sortOrder === 'asc' ? '↑' : '↓')}
                     </th>
                     <th 
-                      className="px-6 py-3 text-left cursor-pointer hover:bg-gray-600"
+                      className="px-6 py-3 text-left cursor-pointer hover:bg-zinc-800"
                       onClick={() => handleSort('name')}
                     >
                       Name {sortField === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
@@ -181,7 +174,7 @@ export default function ListingsPage() {
                     return (
                       <tr 
                         key={entry.id} 
-                        className="border-b border-gray-700 hover:bg-gray-700/50"
+                        className="border-b border-gray-700 hover:bg-zinc-800/50"
                       >
                         <td className="px-6 py-4">{entry.date}</td>
                         <td className="px-6 py-4">{entry.invoiceNo}</td>
@@ -191,20 +184,20 @@ export default function ListingsPage() {
                           <div className="flex justify-end space-x-2">
                             <button
                               onClick={() => window.open(`/api/generate-pdf?id=${entry.id}`, '_blank')}
-                              className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+                              className="px-4 py-2 rounded border hover:bg-zinc-50  hover:text-zinc-900 border-zinc-800  transition"
                               disabled={actionLoading}
                             >
                               View
                             </button>
                             <Link
                               href={`/edit/${entry.id}`}
-                              className="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-700 transition"
+                              className="px-4 py-2 rounded border hover:bg-zinc-50  hover:text-zinc-900 border-zinc-800  transition"
                             >
                               Edit
                             </Link>
                             <button
                               onClick={() => handleDelete(entry.id)}
-                              className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
+                              className="px-4 py-2 rounded border bg-red-600 hover:bg-red-700   border-zinc-800  transition"
                               disabled={actionLoading}
                             >
                               Delete
@@ -229,8 +222,8 @@ export default function ListingsPage() {
                     onClick={() => setCurrentPage(page)}
                     className={`px-3 py-1 rounded ${
                       currentPage === page
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        ? 'bg-zinc-50 text-zinc-900'
+                        : 'border hover:bg-zinc-600'
                     }`}
                   >
                     {page}
